@@ -57,10 +57,13 @@ public:
         MainWindow->setMinimumSize(QSize(270, 350));
         actionBot = new QAction(MainWindow);
         actionBot->setObjectName(QString::fromUtf8("actionBot"));
+        actionBot->setCheckable(true);
         actionOffline_player = new QAction(MainWindow);
         actionOffline_player->setObjectName(QString::fromUtf8("actionOffline_player"));
+        actionOffline_player->setCheckable(true);
         actionOnline_player = new QAction(MainWindow);
         actionOnline_player->setObjectName(QString::fromUtf8("actionOnline_player"));
+        actionOnline_player->setCheckable(true);
         actionLAN_settings = new QAction(MainWindow);
         actionLAN_settings->setObjectName(QString::fromUtf8("actionLAN_settings"));
         centralWidget = new QWidget(MainWindow);

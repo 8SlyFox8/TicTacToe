@@ -262,16 +262,25 @@
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionBot">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>Bot</string>
    </property>
   </action>
   <action name="actionOffline_player">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>Offline player</string>
    </property>
   </action>
   <action name="actionOnline_player">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>Online player</string>
    </property>
