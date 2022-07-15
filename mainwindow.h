@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 #include <QRandomGenerator>
-#include <vector>
+#include <config.h>
 
 namespace Ui {
 class MainWindow;
@@ -34,9 +34,10 @@ private slots:
     void on_pushButton_7_clicked();
     void on_pushButton_8_clicked();
     void on_pushButton_9_clicked();
-    void victoryCheck(); // Метод для проверки победителя
+    void victoryCheck(bool turnCheck); // Метод для проверки победителя
     void gameModeCheck(); // Метод для проверки режима игры
     void stopGame(); // Метод для остановки игры в случае победителя
+    void botTurn(); // Метод для ходов ИИ в режиме против бота
 
 private:
     Ui::MainWindow *ui;
@@ -44,6 +45,8 @@ private:
     QString choiceOfFigure; //Выбор кокой фигурой ходить
     QString field[9] = {"", "", "", "", "", "", "", "", ""}; //Значения всех клеток в игровом поле
     int cell; //Номер клетки на игровом поле
+    bool newTurn; //Флаг разрешающий ходить боту в выбранную ему клетку
+    int selectedCell; //Выбранная ботом клетка для хода
 };
 
 #endif // MAINWINDOW_H

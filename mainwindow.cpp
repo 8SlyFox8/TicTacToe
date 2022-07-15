@@ -28,6 +28,9 @@ void MainWindow::on_actionBot_triggered()
     buttonClear();
     choiceOfWhoTurn(rand() % 2);
     buttonLock();
+    if (choiceOfTurn==true) {
+        gameModeCheck();
+    }
 }
 
 ///
@@ -64,7 +67,9 @@ void MainWindow::on_actionOnline_player_triggered()
 ///
 void MainWindow::on_actionLAN_settings_triggered()
 {
-    ui->label->setText("Новое окно");
+    config window;
+    window.setModal(true);
+    window.exec();
 }
 
 ///
@@ -74,7 +79,7 @@ void MainWindow::on_actionLAN_settings_triggered()
 void MainWindow::choiceOfWhoTurn(bool changeCurrentMove)
 {
     choiceOfTurn = changeCurrentMove;
-    if (choiceOfTurn == 1)
+    if (choiceOfTurn == true)
     {
         choiceOfFigure = "O";
     }
@@ -90,50 +95,33 @@ void MainWindow::choiceOfWhoTurn(bool changeCurrentMove)
 ///
 void MainWindow::buttonLock()
 {
-    if (choiceOfTurn == 1)
-    {
-        ui->label->setText("Waiting");
-        ui->pushButton->setEnabled(false);
-        ui->pushButton_2->setEnabled(false);
-        ui->pushButton_3->setEnabled(false);
-        ui->pushButton_4->setEnabled(false);
-        ui->pushButton_5->setEnabled(false);
-        ui->pushButton_6->setEnabled(false);
-        ui->pushButton_7->setEnabled(false);
-        ui->pushButton_8->setEnabled(false);
-        ui->pushButton_9->setEnabled(false);
-        gameModeCheck();
+    ui->label->setText("You turn");
+    if (field[0]=="") {
+        ui->pushButton->setEnabled(true);
     }
-    else
-    {
-        ui->label->setText("You turn");
-        if (field[0]=="") {
-            ui->pushButton->setEnabled(true);
-        }
-        if (field[1]=="") {
-            ui->pushButton_2->setEnabled(true);
-        }
-        if (field[2]=="") {
-            ui->pushButton_3->setEnabled(true);
-        }
-        if (field[3]=="") {
-            ui->pushButton_4->setEnabled(true);
-        }
-        if (field[4]=="") {
-            ui->pushButton_5->setEnabled(true);
-        }
-        if (field[5]=="") {
-            ui->pushButton_6->setEnabled(true);
-        }
-        if (field[6]=="") {
-            ui->pushButton_7->setEnabled(true);
-        }
-        if (field[7]=="") {
-            ui->pushButton_8->setEnabled(true);
-        }
-        if (field[8]=="") {
-            ui->pushButton_9->setEnabled(true);
-        }
+    if (field[1]=="") {
+        ui->pushButton_2->setEnabled(true);
+    }
+    if (field[2]=="") {
+        ui->pushButton_3->setEnabled(true);
+    }
+    if (field[3]=="") {
+        ui->pushButton_4->setEnabled(true);
+    }
+    if (field[4]=="") {
+        ui->pushButton_5->setEnabled(true);
+    }
+    if (field[5]=="") {
+        ui->pushButton_6->setEnabled(true);
+    }
+    if (field[6]=="") {
+        ui->pushButton_7->setEnabled(true);
+    }
+    if (field[7]=="") {
+        ui->pushButton_8->setEnabled(true);
+    }
+    if (field[8]=="") {
+        ui->pushButton_9->setEnabled(true);
     }
 }
 
@@ -162,8 +150,7 @@ void MainWindow::on_pushButton_clicked()
     ui->pushButton->setText(choiceOfFigure);
     ui->pushButton->setEnabled(false);
     field[0] = choiceOfFigure;
-    victoryCheck();
-    gameModeCheck();
+    victoryCheck(true);
 }
 
 void MainWindow::on_pushButton_2_clicked()
@@ -171,8 +158,7 @@ void MainWindow::on_pushButton_2_clicked()
     ui->pushButton_2->setText(choiceOfFigure);
     ui->pushButton_2->setEnabled(false);
     field[1] = choiceOfFigure;
-    victoryCheck();
-    gameModeCheck();
+    victoryCheck(true);
 }
 
 void MainWindow::on_pushButton_3_clicked()
@@ -180,8 +166,7 @@ void MainWindow::on_pushButton_3_clicked()
     ui->pushButton_3->setText(choiceOfFigure);
     ui->pushButton_3->setEnabled(false);
     field[2] = choiceOfFigure;
-    victoryCheck();
-    gameModeCheck();
+    victoryCheck(true);
 }
 
 void MainWindow::on_pushButton_4_clicked()
@@ -189,8 +174,7 @@ void MainWindow::on_pushButton_4_clicked()
     ui->pushButton_4->setText(choiceOfFigure);
     ui->pushButton_4->setEnabled(false);
     field[3] = choiceOfFigure;
-    victoryCheck();
-    gameModeCheck();
+    victoryCheck(true);
 }
 
 void MainWindow::on_pushButton_5_clicked()
@@ -198,8 +182,7 @@ void MainWindow::on_pushButton_5_clicked()
     ui->pushButton_5->setText(choiceOfFigure);
     ui->pushButton_5->setEnabled(false);
     field[4] = choiceOfFigure;
-    victoryCheck();
-    gameModeCheck();
+    victoryCheck(true);
 }
 
 void MainWindow::on_pushButton_6_clicked()
@@ -207,8 +190,7 @@ void MainWindow::on_pushButton_6_clicked()
     ui->pushButton_6->setText(choiceOfFigure);
     ui->pushButton_6->setEnabled(false);
     field[5] = choiceOfFigure;
-    victoryCheck();
-    gameModeCheck();
+    victoryCheck(true);
 }
 
 void MainWindow::on_pushButton_7_clicked()
@@ -216,8 +198,7 @@ void MainWindow::on_pushButton_7_clicked()
     ui->pushButton_7->setText(choiceOfFigure);
     ui->pushButton_7->setEnabled(false);
     field[6] = choiceOfFigure;
-    victoryCheck();
-    gameModeCheck();
+    victoryCheck(true);
 }
 
 void MainWindow::on_pushButton_8_clicked()
@@ -225,8 +206,7 @@ void MainWindow::on_pushButton_8_clicked()
     ui->pushButton_8->setText(choiceOfFigure);
     ui->pushButton_8->setEnabled(false);
     field[7] = choiceOfFigure;
-    victoryCheck();
-    gameModeCheck();
+    victoryCheck(true);
 }
 
 void MainWindow::on_pushButton_9_clicked()
@@ -234,39 +214,30 @@ void MainWindow::on_pushButton_9_clicked()
     ui->pushButton_9->setText(choiceOfFigure);
     ui->pushButton_9->setEnabled(false);
     field[8] = choiceOfFigure;
-    victoryCheck();
-    gameModeCheck();
+    victoryCheck(true);
+
 }
 
 ///
 /// \brief MainWindow::victoryCheck
 /// Метод для проверки победителя
 ///
-void MainWindow::victoryCheck()
+void MainWindow::victoryCheck(bool turnCheck)
 {
-    if ((field[0]==field[1]) && (field[0]==field[2]) && (field[0]!="")) {
+    if (((field[0]==field[1]) && (field[0]==field[2]) && (field[0]!="")) ||
+        ((field[3]==field[4]) && (field[3]==field[5]) && (field[3]!="")) ||
+        ((field[6]==field[7]) && (field[6]==field[8]) && (field[6]!="")) ||
+        ((field[0]==field[3]) && (field[0]==field[6]) && (field[0]!="")) ||
+        ((field[1]==field[4]) && (field[1]==field[7]) && (field[1]!="")) ||
+        ((field[2]==field[5]) && (field[2]==field[8]) && (field[2]!="")) ||
+        ((field[0]==field[4]) && (field[0]==field[8]) && (field[0]!="")) ||
+        ((field[2]==field[4]) && (field[2]==field[6]) && (field[2]!=""))) {
         stopGame();
     }
-    if ((field[3]==field[4]) && (field[3]==field[5]) && (field[3]!="")) {
-        stopGame();
-    }
-    if ((field[6]==field[7]) && (field[6]==field[8]) && (field[6]!="")) {
-        stopGame();
-    }
-    if ((field[0]==field[3]) && (field[0]==field[6]) && (field[0]!="")) {
-        stopGame();
-    }
-    if ((field[1]==field[4]) && (field[1]==field[7]) && (field[1]!="")) {
-        stopGame();
-    }
-    if ((field[2]==field[5]) && (field[2]==field[8]) && (field[2]!="")) {
-        stopGame();
-    }
-    if ((field[0]==field[4]) && (field[0]==field[8]) && (field[0]!="")) {
-        stopGame();
-    }
-    if ((field[2]==field[4]) && (field[2]==field[6]) && (field[2]!="")) {
-        stopGame();
+    else {
+        if (turnCheck == true) {
+            gameModeCheck();
+        }
     }
 }
 
@@ -277,7 +248,7 @@ void MainWindow::victoryCheck()
 void MainWindow::gameModeCheck()
 {
     if (ui->actionBot->isChecked() == true) {
-
+        botTurn();
     }
     if (ui->actionOffline_player->isChecked() == true) {
         if (choiceOfTurn == true) {
@@ -310,3 +281,69 @@ void MainWindow::stopGame()
     ui->pushButton_8->setEnabled(false);
     ui->pushButton_9->setEnabled(false);
 }
+
+///
+/// \brief MainWindow::botTurn
+/// Метод для ходов ИИ в режиме против бота
+///
+void MainWindow::botTurn()
+{
+    choiceOfWhoTurn(!choiceOfTurn);
+    newTurn = true;
+    while (newTurn == true) {
+        selectedCell = rand() % 9;
+        if (field[selectedCell] == "") {
+            newTurn = false;
+        }
+    }
+    switch (selectedCell) {
+    case 0:
+        ui->pushButton->setText(choiceOfFigure);
+        ui->pushButton->setEnabled(false);
+        field[0] = choiceOfFigure;
+        break;
+    case 1:
+        ui->pushButton_2->setText(choiceOfFigure);
+        ui->pushButton_2->setEnabled(false);
+        field[1] = choiceOfFigure;
+        break;
+    case 2:
+        ui->pushButton_3->setText(choiceOfFigure);
+        ui->pushButton_3->setEnabled(false);
+        field[2] = choiceOfFigure;
+        break;
+    case 3:
+        ui->pushButton_4->setText(choiceOfFigure);
+        ui->pushButton_4->setEnabled(false);
+        field[3] = choiceOfFigure;
+        break;
+    case 4:
+        ui->pushButton_5->setText(choiceOfFigure);
+        ui->pushButton_5->setEnabled(false);
+        field[4] = choiceOfFigure;
+        break;
+    case 5:
+        ui->pushButton_6->setText(choiceOfFigure);
+        ui->pushButton_6->setEnabled(false);
+        field[5] = choiceOfFigure;
+        break;
+    case 6:
+        ui->pushButton_7->setText(choiceOfFigure);
+        ui->pushButton_7->setEnabled(false);
+        field[6] = choiceOfFigure;
+        break;
+    case 7:
+        ui->pushButton_8->setText(choiceOfFigure);
+        ui->pushButton_8->setEnabled(false);
+        field[7] = choiceOfFigure;
+        break;
+    case 8:
+        ui->pushButton_9->setText(choiceOfFigure);
+        ui->pushButton_9->setEnabled(false);
+        field[8] = choiceOfFigure;
+        break;
+    }
+    victoryCheck(false);
+    choiceOfWhoTurn(!choiceOfTurn);
+}
+

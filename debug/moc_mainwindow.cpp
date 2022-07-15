@@ -22,8 +22,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_MainWindow_t {
-    QByteArrayData data[22];
-    char stringdata0[441];
+    QByteArrayData data[24];
+    char stringdata0[459];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -52,8 +52,10 @@ QT_MOC_LITERAL(16, 333, 23), // "on_pushButton_7_clicked"
 QT_MOC_LITERAL(17, 357, 23), // "on_pushButton_8_clicked"
 QT_MOC_LITERAL(18, 381, 23), // "on_pushButton_9_clicked"
 QT_MOC_LITERAL(19, 405, 12), // "victoryCheck"
-QT_MOC_LITERAL(20, 418, 13), // "gameModeCheck"
-QT_MOC_LITERAL(21, 432, 8) // "stopGame"
+QT_MOC_LITERAL(20, 418, 9), // "turnCheck"
+QT_MOC_LITERAL(21, 428, 13), // "gameModeCheck"
+QT_MOC_LITERAL(22, 442, 8), // "stopGame"
+QT_MOC_LITERAL(23, 451, 7) // "botTurn"
 
     },
     "MainWindow\0on_actionBot_triggered\0\0"
@@ -66,7 +68,8 @@ QT_MOC_LITERAL(21, 432, 8) // "stopGame"
     "on_pushButton_4_clicked\0on_pushButton_5_clicked\0"
     "on_pushButton_6_clicked\0on_pushButton_7_clicked\0"
     "on_pushButton_8_clicked\0on_pushButton_9_clicked\0"
-    "victoryCheck\0gameModeCheck\0stopGame"
+    "victoryCheck\0turnCheck\0gameModeCheck\0"
+    "stopGame\0botTurn"
 };
 #undef QT_MOC_LITERAL
 
@@ -76,7 +79,7 @@ static const uint qt_meta_data_MainWindow[] = {
        8,       // revision
        0,       // classname
        0,    0, // classinfo
-      19,   14, // methods
+      20,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -84,25 +87,26 @@ static const uint qt_meta_data_MainWindow[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    0,  109,    2, 0x08 /* Private */,
-       3,    0,  110,    2, 0x08 /* Private */,
-       4,    0,  111,    2, 0x08 /* Private */,
-       5,    0,  112,    2, 0x08 /* Private */,
-       6,    1,  113,    2, 0x08 /* Private */,
-       8,    0,  116,    2, 0x08 /* Private */,
-       9,    0,  117,    2, 0x08 /* Private */,
-      10,    0,  118,    2, 0x08 /* Private */,
-      11,    0,  119,    2, 0x08 /* Private */,
-      12,    0,  120,    2, 0x08 /* Private */,
-      13,    0,  121,    2, 0x08 /* Private */,
-      14,    0,  122,    2, 0x08 /* Private */,
-      15,    0,  123,    2, 0x08 /* Private */,
-      16,    0,  124,    2, 0x08 /* Private */,
-      17,    0,  125,    2, 0x08 /* Private */,
-      18,    0,  126,    2, 0x08 /* Private */,
-      19,    0,  127,    2, 0x08 /* Private */,
-      20,    0,  128,    2, 0x08 /* Private */,
-      21,    0,  129,    2, 0x08 /* Private */,
+       1,    0,  114,    2, 0x08 /* Private */,
+       3,    0,  115,    2, 0x08 /* Private */,
+       4,    0,  116,    2, 0x08 /* Private */,
+       5,    0,  117,    2, 0x08 /* Private */,
+       6,    1,  118,    2, 0x08 /* Private */,
+       8,    0,  121,    2, 0x08 /* Private */,
+       9,    0,  122,    2, 0x08 /* Private */,
+      10,    0,  123,    2, 0x08 /* Private */,
+      11,    0,  124,    2, 0x08 /* Private */,
+      12,    0,  125,    2, 0x08 /* Private */,
+      13,    0,  126,    2, 0x08 /* Private */,
+      14,    0,  127,    2, 0x08 /* Private */,
+      15,    0,  128,    2, 0x08 /* Private */,
+      16,    0,  129,    2, 0x08 /* Private */,
+      17,    0,  130,    2, 0x08 /* Private */,
+      18,    0,  131,    2, 0x08 /* Private */,
+      19,    1,  132,    2, 0x08 /* Private */,
+      21,    0,  135,    2, 0x08 /* Private */,
+      22,    0,  136,    2, 0x08 /* Private */,
+      23,    0,  137,    2, 0x08 /* Private */,
 
  // slots: parameters
     QMetaType::Void,
@@ -121,6 +125,7 @@ static const uint qt_meta_data_MainWindow[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
+    QMetaType::Void, QMetaType::Bool,   20,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
@@ -150,9 +155,10 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 13: _t->on_pushButton_7_clicked(); break;
         case 14: _t->on_pushButton_8_clicked(); break;
         case 15: _t->on_pushButton_9_clicked(); break;
-        case 16: _t->victoryCheck(); break;
+        case 16: _t->victoryCheck((*reinterpret_cast< bool(*)>(_a[1]))); break;
         case 17: _t->gameModeCheck(); break;
         case 18: _t->stopGame(); break;
+        case 19: _t->botTurn(); break;
         default: ;
         }
     }
@@ -187,13 +193,13 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 19)
+        if (_id < 20)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 19;
+        _id -= 20;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 19)
+        if (_id < 20)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 19;
+        _id -= 20;
     }
     return _id;
 }
