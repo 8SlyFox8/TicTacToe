@@ -36,6 +36,7 @@ void config::showEvent(QShowEvent *event)
     file_config.setFileName("Settings/LANsettings.cfg");
     if (file_config.open(QIODevice::ReadOnly))
     {
+        //Чтение настроек из файла настроек сетевой игры
         senderIP = file_config.readLine();
         senderIP = senderIP.left(senderIP.indexOf("\r\n"));
         ui->lineEdit->setText(senderIP);
@@ -53,7 +54,6 @@ void config::showEvent(QShowEvent *event)
     {
         QMessageBox::information(this, "Ошибка", "Файл настроек не загрузился");
     }
-   void showEvent();
 }
 
 
@@ -71,6 +71,7 @@ void config::on_pushButton_clicked()
     file_config.setFileName("Settings/LANsettings.cfg");
     if (file_config.open(QIODevice::WriteOnly))
     {
+        //Запись настроек в файла настроек сетевой игры
         QTextStream writeStream(&file_config);
         QTextCodec *codec = QTextCodec::codecForName("utf8");
         writeStream << ui->lineEdit->text() << codec->toUnicode("\r\n")
@@ -82,6 +83,7 @@ void config::on_pushButton_clicked()
         recipientIP = ui->lineEdit_3->text();
         recipientPort = ui->lineEdit_4->text();
         file_config.close();
+        // Передача данных для подключения в сетевом режиме
         emit sendLanSetting(senderIP, senderPort, recipientIP, recipientPort);
     }
     else
@@ -91,6 +93,10 @@ void config::on_pushButton_clicked()
     config::close(); //Зарыть окно настроек
 }
 
+///
+/// \brief config::on_pushButton_2_clicked
+/// \brief Зарыть окно настроек
+///
 void config::on_pushButton_2_clicked()
 {
     config::close(); //Зарыть окно настроек

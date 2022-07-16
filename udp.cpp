@@ -19,13 +19,14 @@ void UDP::readingData() //Чтение данных
         UdpMessage.resize(udpSocket->pendingDatagramSize());
         //Чтение данных из сообщения
         udpSocket->readDatagram(UdpMessage.data(), UdpMessage.size());
-        qDebug() << UdpMessage.data(); //Вывод информации в консоль
+        //Если пришла '9' - перейти в сетевой режим игры
         if (UdpMessage[0] == '9') {
-            emit buttonClear();
-            emit choiceOfWhoTurn(true);
-            emit buttonLock(true);
+            emit buttonClear(); //Очистить полк текущей игры
+            emit choiceOfWhoTurn(true); //Ходит соперник
+            emit buttonLock(true); //Заблокировать все клетки
         }
         else {
+            // Метод для ходов противника в онлайн режиме
             emit playerTurn(UdpMessage[0]);
         }
 
@@ -39,6 +40,7 @@ void UDP::readingData() //Чтение данных
 ///
 void UDP::transmitMessage(QByteArray comand)
 {
+    //Отправка сообщения на заданный IP и порт
     udpSocket->writeDatagram(comand, senderIP, senderPORT);
 }
 

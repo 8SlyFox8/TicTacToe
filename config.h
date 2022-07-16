@@ -28,12 +28,14 @@ public:
     ~config();
 
 signals:
+    // Передача данных для подключения в сетевом режиме
     void sendLanSetting(QString senderIp, QString senderPort,
                         QString recipientIp, QString recipientPort);
 
 private slots:
     //Сохраннение настроек IP и порта для сетевой игры в файл
     void on_pushButton_clicked();
+    //Зарыть окно настроек
     void on_pushButton_2_clicked();
 
 private:

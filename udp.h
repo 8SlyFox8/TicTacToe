@@ -13,9 +13,13 @@ public:
     QByteArray UdpMessage; //Массив сообщения
 
 signals:
+    // Метод для блокировки кнопок не в свой ход
     void buttonLock(bool unlockButtons);
+    // Метод для выбора кто ходит и какой фигурой
     void choiceOfWhoTurn(bool changeCurrentMove);
+    // Очистка поля при запуске/перезапуске режима игры
     void buttonClear();
+    // Метод для ходов противника в онлайн режиме
     void playerTurn(char selectedCell);
 
 public slots:

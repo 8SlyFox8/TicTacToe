@@ -20,7 +20,9 @@ public:
     ~MainWindow();
 
 signals:
+    // Передача данных о ходе или смене режима игры
     void transmitMessage(QByteArray comand);
+    // Передача данных для подключения в сетевом режиме
     void sendLanSetting(QString senderIp, QString senderPort,
                         QString recipientIp, QString recipientPort);
 

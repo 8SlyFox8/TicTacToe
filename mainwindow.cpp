@@ -7,6 +7,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    //Запуск приложения в режиме игры с ботом
     on_actionBot_triggered();
 
     connect(this, &MainWindow::transmitMessage, &instanceUDP, &UDP::transmitMessage);
@@ -16,9 +17,11 @@ MainWindow::MainWindow(QWidget *parent) :
     connect( &instanceUDP, &UDP::buttonLock, this, &MainWindow::buttonLock);    
     connect( &instanceUDP, &UDP::playerTurn, this, &MainWindow::playerTurn);
 
+
     file_config.setFileName("Settings/LANsettings.cfg");
     if (file_config.open(QIODevice::ReadOnly))
     {
+        //Чтение настроек из файла настроек сетевой игры
         senderIP = file_config.readLine();
         senderIP = senderIP.left(senderIP.indexOf("\r\n"));
         senderPort = file_config.readLine();
@@ -27,6 +30,7 @@ MainWindow::MainWindow(QWidget *parent) :
         recipientIP = recipientIP.left(recipientIP.indexOf("\r\n"));
         recipientPort = file_config.readLine();
         file_config.close();
+        // Передача данных для подключения в сетевом режиме
         emit sendLanSetting(senderIP, senderPort, recipientIP, recipientPort);
     }
     else
@@ -46,12 +50,14 @@ MainWindow::~MainWindow()
 ///
 void MainWindow::on_actionBot_triggered()
 {
+    //Перключение режима игры в меню
     ui->actionBot->setChecked(true);
     ui->actionOffline_player->setChecked(false);
     ui->actionOnline_player->setChecked(false);
-    buttonClear();
-    choiceOfWhoTurn(rand() % 2);
+    buttonClear(); //Очистка поля
+    choiceOfWhoTurn(rand() % 2); //Выбор хода игрока
     buttonLock(choiceOfTurn);
+    //Если первый ход за ботом
     if (choiceOfTurn==true) {
         gameModeCheck();
         buttonLock(!choiceOfTurn);
@@ -64,11 +70,12 @@ void MainWindow::on_actionBot_triggered()
 ///
 void MainWindow::on_actionOffline_player_triggered()
 {
+    //Перключение режима игры в меню
     ui->actionBot->setChecked(false);
     ui->actionOffline_player->setChecked(true);
     ui->actionOnline_player->setChecked(false);
-    buttonClear();
-    choiceOfWhoTurn(false);
+    buttonClear(); //Очистка поля
+    choiceOfWhoTurn(false); //Выбор хода игрока. Первые всегда X
     buttonLock(choiceOfTurn);
 }
 
@@ -78,13 +85,16 @@ void MainWindow::on_actionOffline_player_triggered()
 ///
 void MainWindow::on_actionOnline_player_triggered()
 {
+    //Перключение режима игры в меню
     ui->actionBot->setChecked(false);
     ui->actionOffline_player->setChecked(false);
     ui->actionOnline_player->setChecked(true);
-    buttonClear();
-    choiceOfWhoTurn(rand() % 2);
+    buttonClear(); //Очистка поля
+    choiceOfWhoTurn(rand() % 2); //Выбор хода игрока
     buttonLock(choiceOfTurn);
+    //Если первый ход за игроком
     if (choiceOfTurn==false) {
+        //Смена режима игры для соперника
         emit transmitMessage("9");
     }
     else {
@@ -111,6 +121,7 @@ void MainWindow::on_actionLAN_settings_triggered()
 void MainWindow::choiceOfWhoTurn(bool changeCurrentMove)
 {
     choiceOfTurn = changeCurrentMove;
+    //Выбор фигуры для хода
     if (choiceOfTurn == true)
     {
         choiceOfFigure = "O";
@@ -129,6 +140,7 @@ void MainWindow::choiceOfWhoTurn(bool changeCurrentMove)
 void MainWindow::buttonLock(bool unlockButtons)
 {
     if (unlockButtons == false) {
+        //Блокировка всех уже нажатых клеток на поле
         ui->label->setText("You turn");
         if (field[0]=="") {
             ui->pushButton->setEnabled(true);
@@ -160,6 +172,7 @@ void MainWindow::buttonLock(bool unlockButtons)
     }
     else
     {
+        //Блокировка всех клеток на поле
         ui->label->setText("Waiting");
         ui->pushButton->setEnabled(false);
         ui->pushButton_2->setEnabled(false);
@@ -282,6 +295,7 @@ void MainWindow::on_pushButton_9_clicked()
 ///
 void MainWindow::victoryCheck(bool turnCheck)
 {
+    //Проверка всех выигрышных раскладов на поле 3 на 3
     if (((field[0]==field[1]) && (field[0]==field[2]) && (field[0]!="")) ||
         ((field[3]==field[4]) && (field[3]==field[5]) && (field[3]!="")) ||
         ((field[6]==field[7]) && (field[6]==field[8]) && (field[6]!="")) ||
@@ -294,6 +308,7 @@ void MainWindow::victoryCheck(bool turnCheck)
     }
     else {
         if (turnCheck == true) {
+            //Проверка режима игры для ответа противника
             gameModeCheck();
         }
     }
@@ -305,9 +320,11 @@ void MainWindow::victoryCheck(bool turnCheck)
 ///
 void MainWindow::gameModeCheck()
 {
+    // Режим игры против бота
     if (ui->actionBot->isChecked() == true) {
         botTurn();
     }
+    // Режим игры против второго игрока за одним компьютером
     if (ui->actionOffline_player->isChecked() == true) {
         if (choiceOfTurn == true) {
             choiceOfWhoTurn(false);
@@ -317,6 +334,7 @@ void MainWindow::gameModeCheck()
         }
 
     }
+    // Режим игры против второго игрока удалённо
     if (ui->actionOnline_player->isChecked() == true) {
         buttonLock(true);
     }
@@ -348,6 +366,7 @@ void MainWindow::botTurn()
 {
     choiceOfWhoTurn(!choiceOfTurn);
     newTurn = true;
+    //Выбор пустой клетки на поле
     while (newTurn == true) {
         selectedCell = rand() % 9;
         if (field[selectedCell] == "") {
