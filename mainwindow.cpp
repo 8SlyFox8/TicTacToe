@@ -7,8 +7,32 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    ui->actionBot->setChecked(true);
     on_actionBot_triggered();
+
+    connect(this, &MainWindow::transmitMessage, &instanceUDP, &UDP::transmitMessage);
+    connect(this, &MainWindow::sendLanSetting, &instanceUDP, &UDP::sendLanSetting);
+    connect( &instanceUDP, &UDP::buttonClear, this, &MainWindow::buttonClear);
+    connect( &instanceUDP, &UDP::choiceOfWhoTurn, this, &MainWindow::choiceOfWhoTurn);
+    connect( &instanceUDP, &UDP::buttonLock, this, &MainWindow::buttonLock);    
+    connect( &instanceUDP, &UDP::playerTurn, this, &MainWindow::playerTurn);
+
+    file_config.setFileName("Settings/LANsettings.cfg");
+    if (file_config.open(QIODevice::ReadOnly))
+    {
+        senderIP = file_config.readLine();
+        senderIP = senderIP.left(senderIP.indexOf("\r\n"));
+        senderPort = file_config.readLine();
+        senderPort = senderPort.left(senderPort.indexOf("\r\n"));
+        recipientIP = file_config.readLine();
+        recipientIP = recipientIP.left(recipientIP.indexOf("\r\n"));
+        recipientPort = file_config.readLine();
+        file_config.close();
+        emit sendLanSetting(senderIP, senderPort, recipientIP, recipientPort);
+    }
+    else
+    {
+        QMessageBox::information(this, "Ошибка", "Файл настроек не загрузился");
+    }
 }
 
 MainWindow::~MainWindow()
@@ -18,7 +42,7 @@ MainWindow::~MainWindow()
 
 ///
 /// \brief MainWindow::on_actionBot_triggered
-/// Режим игры против бота
+/// \brief Режим игры против бота
 ///
 void MainWindow::on_actionBot_triggered()
 {
@@ -27,15 +51,16 @@ void MainWindow::on_actionBot_triggered()
     ui->actionOnline_player->setChecked(false);
     buttonClear();
     choiceOfWhoTurn(rand() % 2);
-    buttonLock();
+    buttonLock(choiceOfTurn);
     if (choiceOfTurn==true) {
         gameModeCheck();
+        buttonLock(!choiceOfTurn);
     }
 }
 
 ///
 /// \brief MainWindow::on_actionOffline_player_triggered
-/// Режим игры против второго игрока за одним компьютером
+/// \brief Режим игры против второго игрока за одним компьютером
 ///
 void MainWindow::on_actionOffline_player_triggered()
 {
@@ -44,12 +69,12 @@ void MainWindow::on_actionOffline_player_triggered()
     ui->actionOnline_player->setChecked(false);
     buttonClear();
     choiceOfWhoTurn(false);
-    buttonLock();
+    buttonLock(choiceOfTurn);
 }
 
 ///
 /// \brief MainWindow::on_actionOnline_player_triggered
-/// Режим игры против второго игрока удалённо
+/// \brief Режим игры против второго игрока удалённо
 ///
 void MainWindow::on_actionOnline_player_triggered()
 {
@@ -58,12 +83,18 @@ void MainWindow::on_actionOnline_player_triggered()
     ui->actionOnline_player->setChecked(true);
     buttonClear();
     choiceOfWhoTurn(rand() % 2);
-    buttonLock();
+    buttonLock(choiceOfTurn);
+    if (choiceOfTurn==false) {
+        emit transmitMessage("9");
+    }
+    else {
+        buttonLock(true);
+    }
 }
 
 ///
 /// \brief MainWindow::on_actionLAN_settings_triggered
-/// Настройки LAN для удалённой игры
+/// \brief Настройки LAN для удалённой игры
 ///
 void MainWindow::on_actionLAN_settings_triggered()
 {
@@ -73,8 +104,9 @@ void MainWindow::on_actionLAN_settings_triggered()
 }
 
 ///
-/// \brief MainWindow::choiceOfWhoGoes
-/// Метод для выбора кто ходит и какой фигурой
+/// \brief MainWindow::choiceOfWhoTurn
+/// \brief Метод для выбора кто ходит и какой фигурой
+/// \param changeCurrentMove
 ///
 void MainWindow::choiceOfWhoTurn(bool changeCurrentMove)
 {
@@ -91,43 +123,59 @@ void MainWindow::choiceOfWhoTurn(bool changeCurrentMove)
 
 ///
 /// \brief MainWindow::buttonLock
-/// Метод для блокировки кнопок не в свой ход
+/// \brief Метод для блокировки кнопок не в свой ход
+/// \param unlockButtons
 ///
-void MainWindow::buttonLock()
+void MainWindow::buttonLock(bool unlockButtons)
 {
-    ui->label->setText("You turn");
-    if (field[0]=="") {
-        ui->pushButton->setEnabled(true);
+    if (unlockButtons == false) {
+        ui->label->setText("You turn");
+        if (field[0]=="") {
+            ui->pushButton->setEnabled(true);
+        }
+        if (field[1]=="") {
+            ui->pushButton_2->setEnabled(true);
+        }
+        if (field[2]=="") {
+            ui->pushButton_3->setEnabled(true);
+        }
+        if (field[3]=="") {
+            ui->pushButton_4->setEnabled(true);
+        }
+        if (field[4]=="") {
+            ui->pushButton_5->setEnabled(true);
+        }
+        if (field[5]=="") {
+            ui->pushButton_6->setEnabled(true);
+        }
+        if (field[6]=="") {
+            ui->pushButton_7->setEnabled(true);
+        }
+        if (field[7]=="") {
+            ui->pushButton_8->setEnabled(true);
+        }
+        if (field[8]=="") {
+            ui->pushButton_9->setEnabled(true);
+        }
     }
-    if (field[1]=="") {
-        ui->pushButton_2->setEnabled(true);
-    }
-    if (field[2]=="") {
-        ui->pushButton_3->setEnabled(true);
-    }
-    if (field[3]=="") {
-        ui->pushButton_4->setEnabled(true);
-    }
-    if (field[4]=="") {
-        ui->pushButton_5->setEnabled(true);
-    }
-    if (field[5]=="") {
-        ui->pushButton_6->setEnabled(true);
-    }
-    if (field[6]=="") {
-        ui->pushButton_7->setEnabled(true);
-    }
-    if (field[7]=="") {
-        ui->pushButton_8->setEnabled(true);
-    }
-    if (field[8]=="") {
-        ui->pushButton_9->setEnabled(true);
+    else
+    {
+        ui->label->setText("Waiting");
+        ui->pushButton->setEnabled(false);
+        ui->pushButton_2->setEnabled(false);
+        ui->pushButton_3->setEnabled(false);
+        ui->pushButton_4->setEnabled(false);
+        ui->pushButton_5->setEnabled(false);
+        ui->pushButton_6->setEnabled(false);
+        ui->pushButton_7->setEnabled(false);
+        ui->pushButton_8->setEnabled(false);
+        ui->pushButton_9->setEnabled(false);
     }
 }
 
 ///
 /// \brief MainWindow::buttonClear
-/// Очистка поля при запуске/перезапуске режима игры
+/// \brief Очистка поля при запуске/перезапуске режима игры
 ///
 void MainWindow::buttonClear()
 {
@@ -150,6 +198,7 @@ void MainWindow::on_pushButton_clicked()
     ui->pushButton->setText(choiceOfFigure);
     ui->pushButton->setEnabled(false);
     field[0] = choiceOfFigure;
+    emit transmitMessage("0");
     victoryCheck(true);
 }
 
@@ -158,6 +207,7 @@ void MainWindow::on_pushButton_2_clicked()
     ui->pushButton_2->setText(choiceOfFigure);
     ui->pushButton_2->setEnabled(false);
     field[1] = choiceOfFigure;
+    emit transmitMessage("1");
     victoryCheck(true);
 }
 
@@ -166,6 +216,7 @@ void MainWindow::on_pushButton_3_clicked()
     ui->pushButton_3->setText(choiceOfFigure);
     ui->pushButton_3->setEnabled(false);
     field[2] = choiceOfFigure;
+    emit transmitMessage("2");
     victoryCheck(true);
 }
 
@@ -174,6 +225,7 @@ void MainWindow::on_pushButton_4_clicked()
     ui->pushButton_4->setText(choiceOfFigure);
     ui->pushButton_4->setEnabled(false);
     field[3] = choiceOfFigure;
+    emit transmitMessage("3");
     victoryCheck(true);
 }
 
@@ -182,6 +234,7 @@ void MainWindow::on_pushButton_5_clicked()
     ui->pushButton_5->setText(choiceOfFigure);
     ui->pushButton_5->setEnabled(false);
     field[4] = choiceOfFigure;
+    emit transmitMessage("4");
     victoryCheck(true);
 }
 
@@ -190,6 +243,7 @@ void MainWindow::on_pushButton_6_clicked()
     ui->pushButton_6->setText(choiceOfFigure);
     ui->pushButton_6->setEnabled(false);
     field[5] = choiceOfFigure;
+    emit transmitMessage("5");
     victoryCheck(true);
 }
 
@@ -198,6 +252,7 @@ void MainWindow::on_pushButton_7_clicked()
     ui->pushButton_7->setText(choiceOfFigure);
     ui->pushButton_7->setEnabled(false);
     field[6] = choiceOfFigure;
+    emit transmitMessage("6");
     victoryCheck(true);
 }
 
@@ -206,6 +261,7 @@ void MainWindow::on_pushButton_8_clicked()
     ui->pushButton_8->setText(choiceOfFigure);
     ui->pushButton_8->setEnabled(false);
     field[7] = choiceOfFigure;
+    emit transmitMessage("7");
     victoryCheck(true);
 }
 
@@ -214,13 +270,15 @@ void MainWindow::on_pushButton_9_clicked()
     ui->pushButton_9->setText(choiceOfFigure);
     ui->pushButton_9->setEnabled(false);
     field[8] = choiceOfFigure;
+    emit transmitMessage("8");
     victoryCheck(true);
 
 }
 
 ///
 /// \brief MainWindow::victoryCheck
-/// Метод для проверки победителя
+/// \brief Метод для проверки победителя
+/// \param turnCheck
 ///
 void MainWindow::victoryCheck(bool turnCheck)
 {
@@ -243,7 +301,7 @@ void MainWindow::victoryCheck(bool turnCheck)
 
 ///
 /// \brief MainWindow::gameModeCheck
-/// Метод для проверки режима игры
+/// \brief Метод для проверки режима игры
 ///
 void MainWindow::gameModeCheck()
 {
@@ -260,13 +318,13 @@ void MainWindow::gameModeCheck()
 
     }
     if (ui->actionOnline_player->isChecked() == true) {
-
+        buttonLock(true);
     }
 }
 
 ///
 /// \brief MainWindow::stopGame
-/// Метод для остановки игры в случае победителя
+/// \brief Метод для остановки игры в случае победителя
 ///
 void MainWindow::stopGame()
 {
@@ -284,7 +342,7 @@ void MainWindow::stopGame()
 
 ///
 /// \brief MainWindow::botTurn
-/// Метод для ходов ИИ в режиме против бота
+/// \brief Метод для ходов ИИ в режиме против бота
 ///
 void MainWindow::botTurn()
 {
@@ -343,6 +401,69 @@ void MainWindow::botTurn()
         field[8] = choiceOfFigure;
         break;
     }
+    victoryCheck(false);
+    choiceOfWhoTurn(!choiceOfTurn); 
+}
+
+///
+/// \brief MainWindow::playerTurn
+/// \brief Метод для ходов противника в онлайн режиме
+/// \param selectedCell
+///
+void MainWindow::playerTurn(char selectedCell)
+{
+    ui->actionBot->setChecked(false);
+    ui->actionOffline_player->setChecked(false);
+    ui->actionOnline_player->setChecked(true);
+    choiceOfWhoTurn(!choiceOfTurn);
+    switch (selectedCell) {
+    case '0':
+        ui->pushButton->setText(choiceOfFigure);
+        ui->pushButton->setEnabled(false);
+        field[0] = choiceOfFigure;
+        break;
+    case '1':
+        ui->pushButton_2->setText(choiceOfFigure);
+        ui->pushButton_2->setEnabled(false);
+        field[1] = choiceOfFigure;
+        break;
+    case '2':
+        ui->pushButton_3->setText(choiceOfFigure);
+        ui->pushButton_3->setEnabled(false);
+        field[2] = choiceOfFigure;
+        break;
+    case '3':
+        ui->pushButton_4->setText(choiceOfFigure);
+        ui->pushButton_4->setEnabled(false);
+        field[3] = choiceOfFigure;
+        break;
+    case '4':
+        ui->pushButton_5->setText(choiceOfFigure);
+        ui->pushButton_5->setEnabled(false);
+        field[4] = choiceOfFigure;
+        break;
+    case '5':
+        ui->pushButton_6->setText(choiceOfFigure);
+        ui->pushButton_6->setEnabled(false);
+        field[5] = choiceOfFigure;
+        break;
+    case '6':
+        ui->pushButton_7->setText(choiceOfFigure);
+        ui->pushButton_7->setEnabled(false);
+        field[6] = choiceOfFigure;
+        break;
+    case '7':
+        ui->pushButton_8->setText(choiceOfFigure);
+        ui->pushButton_8->setEnabled(false);
+        field[7] = choiceOfFigure;
+        break;
+    case '8':
+        ui->pushButton_9->setText(choiceOfFigure);
+        ui->pushButton_9->setEnabled(false);
+        field[8] = choiceOfFigure;
+        break;
+    }
+    buttonLock(false);
     victoryCheck(false);
     choiceOfWhoTurn(!choiceOfTurn);
 }

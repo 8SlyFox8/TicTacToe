@@ -250,6 +250,7 @@ Makefile: TicTacToe.pro ../../Qt/5.14.2/mingw73_64/mkspecs/win32-g++/qmake.conf 
 		TicTacToe.pro \
 		../../Qt/5.14.2/mingw73_64/lib/Qt5Widgets.prl \
 		../../Qt/5.14.2/mingw73_64/lib/Qt5Gui.prl \
+		../../Qt/5.14.2/mingw73_64/lib/Qt5Network.prl \
 		../../Qt/5.14.2/mingw73_64/lib/Qt5Core.prl \
 		../../Qt/5.14.2/mingw73_64/lib/qtmain.prl \
 		../../Qt/5.14.2/mingw73_64/mkspecs/features/build_pass.prf
@@ -434,6 +435,7 @@ Makefile: TicTacToe.pro ../../Qt/5.14.2/mingw73_64/mkspecs/win32-g++/qmake.conf 
 TicTacToe.pro:
 ../../Qt/5.14.2/mingw73_64/lib/Qt5Widgets.prl:
 ../../Qt/5.14.2/mingw73_64/lib/Qt5Gui.prl:
+../../Qt/5.14.2/mingw73_64/lib/Qt5Network.prl:
 ../../Qt/5.14.2/mingw73_64/lib/Qt5Core.prl:
 ../../Qt/5.14.2/mingw73_64/lib/qtmain.prl:
 ../../Qt/5.14.2/mingw73_64/mkspecs/features/build_pass.prf:
